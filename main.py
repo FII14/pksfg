@@ -2,9 +2,9 @@ import os
 import time
 import subprocess
 
-file_stegano = input("Enter the path to the steghide file: ")
+file_stegano = input("Masukkan nama file steganografi: ")
 
-file_wordlist = input("Enter the path to the wordlist: ")
+file_wordlist = input("Masukkan nama file wordlist: ")
 
 
 try:
