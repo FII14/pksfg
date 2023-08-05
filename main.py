@@ -1,31 +1,32 @@
 import os
 import time
-import argparse
 import subprocess
 
-file = input("Enter the path to the steghide file: ")
+file_stegano = input("Enter the path to the steghide file: ")
 
-wordlist = input("Enter the path to the wordlist: ")
+file_wordlist = input("Enter the path to the wordlist: ")
 
 
 try:
-    with open(wordlist, 'r') as wordlist_file:
-        for line in wordlist_file:
-            password = line.strip()
-            command = ['steghide', 'extract', '-sf', file, '-p', password, '-f']
+    with open(file_wordlist, 'r') as w:
+        for baris in w:
+            kata_sandi = baris.strip()
+            command = ['steghide', 'extract', '-sf', file_stegano, '-p', kata_sandi, '-f']
             result = subprocess.run(command, capture_output=True, text=True)
 
             if result.returncode == 0:
                 cracked_file = f"{file}.out"
                 command_s = ['steghide', 'extract', '-sf', file, '-p', password, '-xf', cracked_file]
                 subprocess.run(command_s, capture_output=True, text=True)
-                print(f"{p}[{c}{now.strftime('%H:%M:%S')}{p}] [{g}INFO{p}] {pb}Cracked file saved as: {g}{cracked_file}{p}")
+                print(f"\n[*] File zip: {file_zip}\n[*] Kata sandi: {password}\n[*] Status: Benar\n")
                 break
+                sys.exit(0)
             else:
-                print(f"{p}[{c}{now.strftime('%H:%M:%S')}{p}] [{gb}INFO{p}] {p}Incorrect password: {r}{password}{p}")
-
+                print(f"\n[*] File zip: {file_zip}\n[*] Kata sandi: {password}\n[*] Status: Salah")
         else:
-            print(f"\n{r}[-] {p}No matching password found in the wordlist.")
-
+            print(f"Kata sandi tidak ditemukan dalam file wordlist '{file_wordlist}'.")
+            sys.exit(1)
+            
 except Exception as e:
-    print(f"{r}[-] {p}An error occurred: {str(e)}")
+    print(f"Terjadi kesalahan: {e}")
+    sys.exit(1)
