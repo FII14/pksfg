@@ -1,38 +1,31 @@
-import gnupg
 import os
-import sys
+import time
+import argparse
+import subprocess
 
-gpg = gnupg.GPG()
+file = input("Enter the path to the steghide file: ")
 
-print("""
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@ Program : Pemecah Kata Sandi File GPG    @
-@ Pembuat : Rofi [FII14]                   @
-@ GitHub  : https://github.com/FII14/PKSFG @
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-""")
+wordlist = input("Enter the path to the wordlist: ")
 
-file_gpg = input("Masukkan nama file GPG: ")
 
-if not os.path.exists(file_gpg):
-    print(f"Kesalahan: File GPG '{file_gpg}' tidak ditemukan.")
-    sys.exit(1)
+try:
+    with open(wordlist, 'r') as wordlist_file:
+        for line in wordlist_file:
+            password = line.strip()
+            command = ['steghide', 'extract', '-sf', file, '-p', password, '-f']
+            result = subprocess.run(command, capture_output=True, text=True)
 
-file_wordlist = input("Masukkan nama file wordlist: ")
+            if result.returncode == 0:
+                cracked_file = f"{file}.out"
+                command_s = ['steghide', 'extract', '-sf', file, '-p', password, '-xf', cracked_file]
+                subprocess.run(command_s, capture_output=True, text=True)
+                print(f"{p}[{c}{now.strftime('%H:%M:%S')}{p}] [{g}INFO{p}] {pb}Cracked file saved as: {g}{cracked_file}{p}")
+                break
+            else:
+                print(f"{p}[{c}{now.strftime('%H:%M:%S')}{p}] [{gb}INFO{p}] {p}Incorrect password: {r}{password}{p}")
 
-if not os.path.exists(file_wordlist):
-    print(f"Kesalahan: File wordlist '{file_wordlist}' tidak ditemukan.")
-    sys.exit(1)
+        else:
+            print(f"\n{r}[-] {p}No matching password found in the wordlist.")
 
-with open(file_wordlist, "r", encoding="latin-1", errors="ignore") as f:
-    daftar_kata_sandi = f.read().splitlines()
-
-for kata_sandi in daftar_kata_sandi:
-    print(f"\n[*] File GPG: {file_gpg}\n[*] Kata sandi: {kata_sandi}\n[*] Status: Salah")
-    with open(file_gpg, 'rb') as f:
-        decrypted_data = gpg.decrypt_file(f, passphrase=kata_sandi)
-        if decrypted_data.ok:
-            print(f"\n[*] File GPG: {file_gpg}\n[*] Kata sandi: {kata_sandi}\n[*] Status: Benar\n")
-            sys.exit(0)
-
-print(f"Kata sandi tidak ditemukan dalam file wordlist '{file_wordlist}'.")
+except Exception as e:
+    print(f"{r}[-] {p}An error occurred: {str(e)}")
