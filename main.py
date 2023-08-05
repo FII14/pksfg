@@ -1,6 +1,7 @@
 import subprocess
 import os
 import sys
+import time
 
 print("""
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -23,7 +24,7 @@ if not os.path.exists(file_wordlist):
     sys.exit(1)
 
 try:
-    with open(file_wordlist, 'r') as daftar_kata_sandi:
+    with open(file_wordlist, 'r', encoding="latin-1", errors="ignore") as daftar_kata_sandi:
         for kata_sandi in daftar_kata_sandi:
             kata_sandi = kata_sandi.strip()
             perintah = ['steghide', 'extract', '-sf', file_steganografi, '-p', kata_sandi, '-f']
