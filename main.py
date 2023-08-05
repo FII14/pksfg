@@ -38,8 +38,8 @@ try:
                 if hasil_extract.returncode == 0:
                     print(f"\n[*] File Terpecahkan: {file_terpecahkan}\n[*] Kata Sandi: {kata_sandi}\n[*] Status: Benar\n")
                     break
-                else:
-                    print(f"\n[*] File Steganografi: {file_steganografi}\n[*] Kata Sandi: {kata_sandi}\n[*] Status: Salah")
+            else:
+                print(f"\n[*] File Steganografi: {file_steganografi}\n[*] Kata Sandi: {kata_sandi}\n[*] Status: Salah")
             time.sleep(1)
         else:
             print(f"Kata sandi tidak ditemukan dalam file wordlist '{file_wordlist}'.")
