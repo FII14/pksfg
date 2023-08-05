@@ -25,8 +25,8 @@ for kata_sandi in daftar_kata_sandi:
     with open(filename, 'rb') as f:
         decrypted_data = gpg.decrypt_file(f, passphrase=passphrase)
         if decrypted_data.ok:
-            print('Berhasil mendekripsi file.')
-            print(decrypted_data.data)
+            print(f"\n[*] File gpg: {file_gpg}\n[*] Kata sandi: {kata_sandi}\n[*] Status: Benar")
             break
-        # else:
-        #    print('Gagal mendekripsi file.')
+            sys.exit(0)
+        else:
+            print(f"\n[*] File gpgp: {file_gpg}\n[*] Kata sandi: {kata_sandi}\n[*] Status: Salah")
